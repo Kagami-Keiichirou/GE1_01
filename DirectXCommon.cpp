@@ -85,7 +85,7 @@ void DirectXCommon::PostDraw()
 	commandList->ResourceBarrier(1, &barrierDesc);
 
 	// 命令のクローズ
-	result = commandList->Close();
+	result = commandList->Close(); //ここで止まる
 	assert(SUCCEEDED(result));
 	// コマンドリストの実行
 	ID3D12CommandList* commandLists[] = { commandList.Get() };
@@ -313,7 +313,7 @@ void DirectXCommon::DepthBufferInitialize()
 	// 深度ビュー用デスクリプタヒープ作成
 	dsvHeapDesc.NumDescriptors = 1; // 深度ビューは1つ
 	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV; // デプスステンシルビュー
-	ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	/*ComPtr<ID3D12DescriptorHeap> dsvHeap;*/
 	result = device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap));
 
 	// 深度ビュー作成
