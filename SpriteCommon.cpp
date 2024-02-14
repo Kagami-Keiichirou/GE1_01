@@ -102,8 +102,6 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 		CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&pipelineState));
 	assert(SUCCEEDED(result));
-
-
 }
 
 IDxcBlob* SpriteCommon::CompileShader(
