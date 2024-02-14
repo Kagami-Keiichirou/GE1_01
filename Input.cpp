@@ -24,7 +24,6 @@ void Input::Initialize(WinApp* winApp) {
 }
 
 void Input::Update() {
-    HRESULT result;
     // ‘O‰ñ‚ÌƒL[“ü—Í‚ğ•Û‘¶
     memcpy(keyPre, key, sizeof(key));
 

@@ -28,11 +28,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     // スプライトコモンの初期化
     spriteCommon_ = new SpriteCommon();
-    spriteCommon_->Initialize();
+    spriteCommon_->Initialize(dxCommon_);
 
     // スプライトの初期化
     sprite_ = new Sprite();
-    sprite_->Initialize();
+    sprite_->Initialize(dxCommon_, spriteCommon_);
 
     // ゲームループ
     while (true) {
