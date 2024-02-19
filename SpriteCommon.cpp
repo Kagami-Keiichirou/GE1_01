@@ -71,11 +71,11 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shader‚ðƒRƒ“ƒpƒCƒ‹‚·‚é
-	IDxcBlob* vertexShaderBlob = CompileShader(L"Resources/shader/SpriteVS.hlsl",
+	IDxcBlob* vertexShaderBlob = CompileShader(L"Resources/shaders/SpriteVS.hlsl",
 		L"vs_6_0", dxcUtils.Get(), dxcCompiler.Get(), includeHandler.Get());
 	assert(vertexShaderBlob != nullptr);
 
-	IDxcBlob* pixelShaderBlob = CompileShader(L"Resources/shader/SpritePS.hlsl",
+	IDxcBlob* pixelShaderBlob = CompileShader(L"Resources/shaders/SpritePS.hlsl",
 		L"ps_6_0", dxcUtils.Get(), dxcCompiler.Get(), includeHandler.Get());
 	assert(pixelShaderBlob != nullptr);
 
@@ -126,7 +126,7 @@ IDxcBlob* SpriteCommon::CompileShader(
 		filePath.c_str(),
 		L"-E", L"main",
 		L"-T", profile,
-		L"-Zi",L"-Qenbed_debug",
+		L"-Zi",L"-Qembed_debug",
 		L"-Od", L"-Zpr",
 	};
 	IDxcResult* shaderResult = nullptr;
@@ -145,11 +145,11 @@ IDxcBlob* SpriteCommon::CompileShader(
 	}
 
 	IDxcBlob* shaderBlob = nullptr;
-	result = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderError), nullptr);
+	result = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
 	assert(SUCCEEDED(result));
 
 	shaderSource->Release();
 	shaderResult->Release();
 
-	return nullptr;
+	return shaderBlob;
 }

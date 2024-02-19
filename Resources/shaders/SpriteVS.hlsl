@@ -1,6 +1,6 @@
 struct VertexShaderOutput
 {
-	float4 position : VS_POSITION;
+	float4 position : SV_POSITION;
 };
 
 struct VertexShaderInput
