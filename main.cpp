@@ -47,6 +47,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         //更新前処理
         dxCommon_->PreDraw(); 
         
+        sprite_->Draw();
+
         //更新後処理
         dxCommon_->PostDraw();
     }
