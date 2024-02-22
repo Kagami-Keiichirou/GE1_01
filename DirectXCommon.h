@@ -45,6 +45,9 @@ private:
 	// FPS固定更新処理
 	void FixFPSUpdate();
 
+	// ディスクリプタヒープ
+	ID3D12DescriptorHeap* CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripots, bool shaderVisible);
+
 private:
 	WinApp* winApp = nullptr;
 
@@ -70,6 +73,13 @@ private:
 	UINT64 fenceVal = 0;
 
 	D3D12_RESOURCE_BARRIER barrierDesc{};
+
+	// ディスクリプタヒープ
+	// RTV(ゲーム画面を保存しておくもの)
+	ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap;
+	// SRV(画像などを保存しておくもの)
+	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap;
+
 
 	//記録用時間計測の変数
 	std::chrono::steady_clock::time_point reference_;

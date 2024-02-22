@@ -10,6 +10,12 @@ class Sprite {
 private:
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 
+	struct Transform {
+		DirectX::XMFLOAT3 scale;
+		DirectX::XMFLOAT3 rotate;
+		DirectX::XMFLOAT3 translate;
+	};
+
 public:
 	//初期化
 	void Initialize(DirectXCommon* dxCommon, SpriteCommon* common);
@@ -33,7 +39,12 @@ private:
 	ComPtr<ID3D12Resource> materialResource;
 	// 情報行列
 	ComPtr<ID3D12Resource> wvpResource;
+	DirectX::XMMATRIX* wvpData = nullptr;
 
 	// パラメータ
 	DirectX::XMFLOAT4 color_ = { 1.0f, 0.0f, 0.0f, 1.0f };
+	Transform transform = { {1,1,1},{0,0,0},{0,0,0} };	
+
+	// カメラ
+	Transform cameraTransform = { {1,1,1},{0,0,0},{0,0,-5} };
 };

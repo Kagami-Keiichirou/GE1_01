@@ -22,6 +22,41 @@ void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
 }
 
 void Sprite::Draw() {
+	// Y軸を中心に回転
+	transform.rotate.y += 0.03f;
+
+	// ワールド
+	XMMATRIX scaleMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&transform.scale));
+	XMMATRIX rotateMatrix = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&transform.rotate));
+	XMMATRIX translationMatrix = XMMatrixTranslationFromVector(XMLoadFloat3(&transform.translate));
+	// 回転行列とスケール行列
+	XMMATRIX rotationAndScaleMatrix = XMMatrixMultiply(rotateMatrix, scaleMatrix);
+	// 最終的な行列変換
+	XMMATRIX worldMatrix = XMMatrixMultiply(rotationAndScaleMatrix, translationMatrix);
+
+	// カメラ
+	XMMATRIX cameraScaleMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&cameraTransform.scale));
+	XMMATRIX cameraRotateMatrix = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&cameraTransform.rotate));
+	XMMATRIX cameraTranslateMatrix = XMMatrixTranslationFromVector(XMLoadFloat3(&cameraTransform.translate));
+	// 回転とスケールの掛け算
+	XMMATRIX cameraRotateAndScameMatrix = XMMatrixMultiply(cameraRotateMatrix, cameraScaleMatrix);
+	// 最終的な行列
+	XMMATRIX cameraMatrix = XMMatrixMultiply(cameraRotateAndScameMatrix, cameraTranslateMatrix);
+
+	// View
+	XMMATRIX view = XMMatrixInverse(nullptr, cameraMatrix);
+	XMMATRIX proj = XMMatrixPerspectiveFovLH(
+		XMConvertToRadians(45.0f),
+		(float)WinApp::window_width /
+		(float)WinApp::window_height, 0.1f, 100.0f
+	);
+
+	//WVP
+	XMMATRIX worldViewProjectionMatrix = worldMatrix * (view * proj);
+
+	// 行列の代入
+	*wvpData = worldViewProjectionMatrix;
+
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(common_->GetRootSignature());
 	dxCommon_->GetCommandList()->SetPipelineState(common_->GetPipelineState());
 	// 頂点情報
@@ -66,9 +101,8 @@ void Sprite::CreateMaterial()
 void Sprite::CreateWVP()
 {
 	wvpResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(XMMATRIX));
-	XMMATRIX* wvpData = nullptr;
+	
 	//書き込むためのアドレスを取得
 	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
-	//今回は赤を書き込んでみる
 	*wvpData = XMMatrixIdentity();
 }
